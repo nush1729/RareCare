@@ -1,0 +1,105 @@
+{
+  "_meta": "Concrete surface forms per concept and language register, used to generate StigmaSymp-W training vignettes. The human-written test set is collected separately and never generated from this file.",
+  "breast_lump": {
+    "clinical": ["a palpable breast mass", "a breast lump"],
+    "lay": ["a lump in my breast", "a hard lump in my left breast", "a swelling in my right breast"],
+    "euphemistic": ["something hard in my chest", "a small knot on my chest"],
+    "hinglish": ["chhati mein gaanth", "seene me gaanth"]
+  },
+  "nipple_discharge": {
+    "clinical": ["nipple discharge"],
+    "lay": ["fluid coming from my nipple", "blood from my nipple", "my nipple is leaking"],
+    "euphemistic": ["some water coming out of my nipple"],
+    "hinglish": []
+  },
+  "nipple_retraction": {
+    "clinical": ["nipple retraction", "nipple inversion"],
+    "lay": ["my nipple has turned inward", "an inverted nipple"],
+    "euphemistic": ["my nipple is going in"],
+    "hinglish": []
+  },
+  "breast_skin_change": {
+    "clinical": ["skin dimpling on the breast", "peau d'orange"],
+    "lay": ["orange peel skin on my breast", "puckering on my breast"],
+    "euphemistic": ["skin on my chest looks dented"],
+    "hinglish": []
+  },
+  "axillary_lump": {
+    "clinical": ["an axillary lump"],
+    "lay": ["a lump in my armpit", "a swelling under my armpit"],
+    "euphemistic": ["a knot under my arm pit"],
+    "hinglish": ["bagal mein gaanth"]
+  },
+  "postcoital_bleeding": {
+    "clinical": ["post-coital bleeding"],
+    "lay": ["bleeding after sex", "spotting after intercourse"],
+    "euphemistic": ["spotting after being with my husband", "bleeding after being intimate", "blood after relations"],
+    "hinglish": ["pati ke saath hone ke baad khoon"]
+  },
+  "intermenstrual_bleeding": {
+    "clinical": ["intermenstrual bleeding"],
+    "lay": ["bleeding between my periods", "spotting between periods"],
+    "euphemistic": ["periods coming twice a month"],
+    "hinglish": ["mc twice in a month"]
+  },
+  "abnormal_vaginal_discharge": {
+    "clinical": ["blood-stained vaginal discharge", "foul-smelling discharge"],
+    "lay": ["smelly discharge", "brown discharge"],
+    "euphemistic": ["white water", "discharge from down there"],
+    "hinglish": ["safed pani", "safed paani"]
+  },
+  "postmenopausal_bleeding": {
+    "clinical": ["post-menopausal bleeding"],
+    "lay": ["bleeding after my menopause", "spotting after my periods stopped"],
+    "euphemistic": ["my periods came back"],
+    "hinglish": []
+  },
+  "vaginal_bleeding_unspecified": {
+    "clinical": ["vaginal bleeding"],
+    "lay": ["bleeding from my vagina"],
+    "euphemistic": ["bleeding from down there", "spotting down there"],
+    "hinglish": ["neeche se khoon"]
+  },
+  "abdominal_distension": {
+    "clinical": ["abdominal distension"],
+    "lay": ["bloating", "a swollen tummy"],
+    "euphemistic": ["clothes feel tight around my waist"],
+    "hinglish": ["pet phoolna", "pet phoola rehta hai"]
+  },
+  "early_satiety": {
+    "clinical": ["early satiety"],
+    "lay": ["feeling full quickly", "I can't eat much"],
+    "euphemistic": ["getting full after a few bites"],
+    "hinglish": ["bhookh nahi lagti"]
+  },
+  "pelvic_pain": {
+    "clinical": ["pelvic pain", "lower abdominal pain"],
+    "lay": ["pain in my lower belly", "pain in my pelvis"],
+    "euphemistic": ["pain down there"],
+    "hinglish": ["pet ke neeche dard"]
+  },
+  "urinary_urgency": {
+    "clinical": ["urinary frequency", "urinary urgency"],
+    "lay": ["needing to pee all the time", "having to urinate urgently"],
+    "euphemistic": ["going to the toilet very often"],
+    "hinglish": ["baar baar toilet jaana"]
+  },
+  "abdominal_pelvic_mass": {
+    "clinical": ["a pelvic mass"],
+    "lay": ["a lump in my lower tummy", "a hard swelling in my belly"],
+    "euphemistic": [],
+    "hinglish": []
+  },
+  "ascites": {
+    "clinical": ["ascites"],
+    "lay": ["fluid in my tummy"],
+    "euphemistic": [],
+    "hinglish": []
+  },
+  "new_bowel_habit_change": {
+    "clinical": ["a change in bowel habit"],
+    "lay": ["new constipation", "recent diarrhoea"],
+    "euphemistic": ["my toilet habits have changed"],
+    "hinglish": []
+  }
+}

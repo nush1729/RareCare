@@ -1,0 +1,401 @@
+{
+  "_meta": {
+    "description": "Lay, euphemistic and Hinglish surface forms mapped to clinical concept ids. Patterns are case-insensitive regular expressions applied to normalised text. 'register' records which language register the pattern belongs to; it drives StigmaSymp-W vignette generation and the euphemism-gap analysis."
+  },
+  "concepts": {
+    "breast_lump": {
+      "label": "Breast lump",
+      "cancers": [
+        "breast"
+      ],
+      "patterns": [
+        {
+          "p": "\\b(breast|boob|chest)\\s+(lump|mass|swelling|knot)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(lump|mass|knot|swelling|hard spot)\\s+(in|on|near)\\s+(my\\s+)?(left\\s+|right\\s+)?(breast|boob|chest)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bpalpable (breast )?mass\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(chhati|chaati|seene)\\s+(mein|me)\\s+gaanth\\b",
+          "register": "hinglish"
+        },
+        {
+          "p": "\\bsomething hard (in|on) (my )?(breast|chest)\\b",
+          "register": "euphemistic"
+        }
+      ]
+    },
+    "nipple_discharge": {
+      "label": "Nipple discharge",
+      "cancers": [
+        "breast"
+      ],
+      "patterns": [
+        {
+          "p": "\\bnipple discharge\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(fluid|liquid|blood|milk|water)\\s+(coming\\s+)?(from|out of)\\s+(my\\s+)?nipple\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bnipple\\s+(is\\s+)?(leaking|oozing|bleeding)\\b",
+          "register": "lay"
+        }
+      ]
+    },
+    "nipple_retraction": {
+      "label": "Nipple retraction",
+      "cancers": [
+        "breast"
+      ],
+      "patterns": [
+        {
+          "p": "\\bnipple (retraction|inversion)\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\bnipple\\s+(has\\s+|is\\s+)?(turned|pulled|sunk|going)\\s+(in|inward|inwards)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\binverted nipple\\b",
+          "register": "lay"
+        }
+      ]
+    },
+    "nipple_change": {
+      "label": "Nipple change of concern",
+      "cancers": [
+        "breast"
+      ],
+      "patterns": [
+        {
+          "p": "\\bnipple\\s+(looks|feels)\\s+(different|strange|odd)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(crusty|scaly|rash on)\\s+(the\\s+)?nipple\\b",
+          "register": "lay"
+        }
+      ]
+    },
+    "breast_skin_change": {
+      "label": "Breast skin change",
+      "cancers": [
+        "breast"
+      ],
+      "patterns": [
+        {
+          "p": "\\b(dimpl\\w*|puckering|peau d.orange)\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\borange[- ]peel\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bskin (on|of) (my )?(breast|chest) (is |looks )?(pulled|dented|red and thick)\\b",
+          "register": "lay"
+        }
+      ]
+    },
+    "axillary_lump": {
+      "label": "Axillary lump",
+      "cancers": [
+        "breast"
+      ],
+      "patterns": [
+        {
+          "p": "\\baxillary (lump|mass|lymphadenopathy)\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(lump|swelling|knot)\\s+(in|under)\\s+(my\\s+)?(arm ?pit|underarm|armpit)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(bagal|bgl)\\s+(mein|me)\\s+gaanth\\b",
+          "register": "hinglish"
+        }
+      ]
+    },
+    "postcoital_bleeding": {
+      "label": "Post-coital bleeding",
+      "cancers": [
+        "cervical"
+      ],
+      "patterns": [
+        {
+          "p": "\\bpost[- ]?coital bleeding\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(bleed\\w*|spotting|blood)\\s+(after|during)\\s+(sex|intercourse|making love)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(bleed\\w*|spotting|blood)\\s+after\\s+(being|sleeping)\\s+with\\s+(my\\s+)?(husband|partner)\\b",
+          "register": "euphemistic"
+        },
+        {
+          "p": "\\b(bleed\\w*|spotting|blood)\\s+after\\s+(relations|intimacy|we are together|being intimate)\\b",
+          "register": "euphemistic"
+        },
+        {
+          "p": "\\bpati ke saath\\b.*\\b(khoon|blood)\\b",
+          "register": "hinglish"
+        }
+      ]
+    },
+    "intermenstrual_bleeding": {
+      "label": "Intermenstrual bleeding",
+      "cancers": [
+        "cervical"
+      ],
+      "patterns": [
+        {
+          "p": "\\bintermenstrual bleeding\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(bleed\\w*|spotting|blood)\\s+between\\s+(my\\s+)?periods\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(periods?|chums|mc)\\s+(coming\\s+)?(twice|two times)\\s+(a|in a|in one)\\s+month\\b",
+          "register": "euphemistic"
+        }
+      ]
+    },
+    "abnormal_vaginal_discharge": {
+      "label": "Abnormal vaginal discharge",
+      "cancers": [
+        "cervical"
+      ],
+      "patterns": [
+        {
+          "p": "\\b(abnormal|blood[- ]stained|foul[- ]smelling|offensive)\\s+(vaginal\\s+)?discharge\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(smelly|bad smell\\w*|brown|bloody|watery)\\s+discharge\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bsafed\\s+pa+ni\\b",
+          "register": "hinglish"
+        },
+        {
+          "p": "\\bwhite\\s+(water|discharge)\\b",
+          "register": "euphemistic"
+        },
+        {
+          "p": "\\bdischarge\\s+(from\\s+)?down\\s+there\\b",
+          "register": "euphemistic"
+        }
+      ]
+    },
+    "postmenopausal_bleeding": {
+      "label": "Post-menopausal bleeding",
+      "cancers": [
+        "endometrial"
+      ],
+      "patterns": [
+        {
+          "p": "\\bpost[- ]?menopausal bleeding\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(bleed\\w*|spotting|blood)\\s+after\\s+(my\\s+)?(menopause|periods (have )?stopped)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bperiods? (came|started|come) back\\b",
+          "register": "euphemistic"
+        }
+      ]
+    },
+    "vaginal_bleeding_unspecified": {
+      "label": "Vaginal bleeding (timing unclear)",
+      "cancers": [
+        "cervical",
+        "endometrial"
+      ],
+      "ambiguous": "bleeding_context",
+      "patterns": [
+        {
+          "p": "\\bvaginal bleeding\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(bleed\\w*|spotting|blood)\\s+(from\\s+)?down\\s+there\\b",
+          "register": "euphemistic"
+        },
+        {
+          "p": "\\b(bleed\\w*|spotting)\\s+from\\s+(my\\s+)?(private parts?|vagina)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bneeche se khoon\\b",
+          "register": "hinglish"
+        }
+      ]
+    },
+    "abdominal_distension": {
+      "label": "Persistent abdominal distension (bloating)",
+      "cancers": [
+        "ovarian"
+      ],
+      "patterns": [
+        {
+          "p": "\\babdominal distension\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(bloat\\w*|swollen (tummy|stomach|belly)|tummy (is )?swollen)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bpet\\s+(phool|fool)\\w*\\b",
+          "register": "hinglish"
+        },
+        {
+          "p": "\\bclothes (feel|are|getting) tight (around|at) (my )?(waist|tummy|stomach)\\b",
+          "register": "euphemistic"
+        }
+      ]
+    },
+    "early_satiety": {
+      "label": "Early satiety / loss of appetite",
+      "cancers": [
+        "ovarian"
+      ],
+      "patterns": [
+        {
+          "p": "\\bearly satiety\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(feel\\w*|getting) full (very )?(quickly|fast|after a few bites|soon)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(can.?t|cannot|unable to) eat (much|properly)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bbhookh nahi\\b",
+          "register": "hinglish"
+        }
+      ]
+    },
+    "pelvic_pain": {
+      "label": "Pelvic or abdominal pain",
+      "cancers": [
+        "ovarian"
+      ],
+      "patterns": [
+        {
+          "p": "\\b(pelvic|lower abdominal) pain\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\bpain (in|at) (my )?(lower (belly|tummy|stomach)|pelvis)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\bpain down there\\b",
+          "register": "euphemistic"
+        },
+        {
+          "p": "\\bpet ke neeche dard\\b",
+          "register": "hinglish"
+        }
+      ]
+    },
+    "urinary_urgency": {
+      "label": "Urinary urgency or frequency",
+      "cancers": [
+        "ovarian"
+      ],
+      "patterns": [
+        {
+          "p": "\\burinary (urgency|frequency)\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(need|needing|have) to (pee|urinate|wee) (a lot|often|all the time|urgently)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(going|run\\w*) to the (toilet|bathroom|washroom) (a lot|all the time|very often)\\b",
+          "register": "euphemistic"
+        },
+        {
+          "p": "\\bbaar baar (peshab|toilet)\\b",
+          "register": "hinglish"
+        }
+      ]
+    },
+    "abdominal_pelvic_mass": {
+      "label": "Abdominal or pelvic mass",
+      "cancers": [
+        "ovarian"
+      ],
+      "patterns": [
+        {
+          "p": "\\b(pelvic|abdominal|adnexal) mass\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(lump|hard swelling) in (my )?(lower )?(tummy|belly|stomach|abdomen)\\b",
+          "register": "lay"
+        }
+      ]
+    },
+    "ascites": {
+      "label": "Ascites",
+      "cancers": [
+        "ovarian"
+      ],
+      "patterns": [
+        {
+          "p": "\\bascites\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\bfluid in (my )?(tummy|belly|stomach|abdomen)\\b",
+          "register": "lay"
+        }
+      ]
+    },
+    "new_bowel_habit_change": {
+      "label": "New IBS-like bowel habit change",
+      "cancers": [
+        "ovarian"
+      ],
+      "patterns": [
+        {
+          "p": "\\bchange in bowel habit\\b",
+          "register": "clinical"
+        },
+        {
+          "p": "\\b(new|recent)\\s+(ibs|constipation|diarrh\\w*)\\b",
+          "register": "lay"
+        },
+        {
+          "p": "\\b(toilet|potty) (habits )?(have )?changed\\b",
+          "register": "euphemistic"
+        }
+      ]
+    }
+  }
+}

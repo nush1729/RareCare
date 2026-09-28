@@ -1,0 +1,296 @@
+{
+  "_meta": {
+    "description": "Research encoding of referral criteria for breast, ovarian, endometrial (post-menopausal bleeding) and cervical symptoms. Paraphrased from NICE NG12 (Suspected cancer: recognition and referral) and NICE CKS guidance. This is an approximation for a research prototype and has NOT been clinically reviewed. Do not use for patient care.",
+    "sources": {
+      "NG12": "https://www.nice.org.uk/guidance/ng12",
+      "CKS-CERVICAL": "https://cks.nice.org.uk/topics/cervical-screening/"
+    },
+    "persistence_rule": "A symptom is treated as persistent if reported for >= 21 days or described with frequency words (daily, always, most days). NG12 ovarian guidance uses 'persistently or frequently, particularly more than 12 times per month'; 21 days is our operational proxy."
+  },
+  "cancers": {
+    "breast": {
+      "label": "Breast cancer"
+    },
+    "cervical": {
+      "label": "Cervical cancer"
+    },
+    "ovarian": {
+      "label": "Ovarian cancer"
+    },
+    "endometrial": {
+      "label": "Endometrial (womb) cancer"
+    }
+  },
+  "criteria": [
+    {
+      "id": "BR-LUMP-30",
+      "cancer": "breast",
+      "tier": "URGENT",
+      "any_of": [
+        "breast_lump"
+      ],
+      "conditions": {
+        "age_band": [
+          "30-49",
+          "50-54",
+          "55+"
+        ]
+      },
+      "action": "Suspected cancer pathway referral (appointment within 2 weeks).",
+      "source": "NG12"
+    },
+    {
+      "id": "BR-LUMP-U30",
+      "cancer": "breast",
+      "tier": "SOON",
+      "any_of": [
+        "breast_lump"
+      ],
+      "conditions": {
+        "age_band": [
+          "<30"
+        ]
+      },
+      "action": "Non-urgent clinical review of an unexplained breast lump.",
+      "source": "NG12"
+    },
+    {
+      "id": "BR-NIPPLE-50",
+      "cancer": "breast",
+      "tier": "URGENT",
+      "any_of": [
+        "nipple_discharge",
+        "nipple_retraction",
+        "nipple_change"
+      ],
+      "conditions": {
+        "age_band": [
+          "50-54",
+          "55+"
+        ],
+        "unilateral": [
+          true
+        ]
+      },
+      "action": "Suspected cancer pathway referral for nipple changes in one nipple only, age 50+.",
+      "source": "NG12"
+    },
+    {
+      "id": "BR-SKIN",
+      "cancer": "breast",
+      "tier": "URGENT",
+      "any_of": [
+        "breast_skin_change"
+      ],
+      "conditions": {},
+      "action": "Consider suspected cancer pathway referral for skin changes suggestive of breast cancer.",
+      "source": "NG12"
+    },
+    {
+      "id": "BR-AXILLA-30",
+      "cancer": "breast",
+      "tier": "URGENT",
+      "any_of": [
+        "axillary_lump"
+      ],
+      "conditions": {
+        "age_band": [
+          "30-49",
+          "50-54",
+          "55+"
+        ]
+      },
+      "action": "Consider suspected cancer pathway referral for an unexplained lump in the armpit, age 30+.",
+      "source": "NG12"
+    },
+    {
+      "id": "OV-MASS",
+      "cancer": "ovarian",
+      "tier": "URGENT",
+      "any_of": [
+        "abdominal_pelvic_mass",
+        "ascites"
+      ],
+      "conditions": {},
+      "action": "Urgent referral if a pelvic/abdominal mass or fluid in the abdomen is found.",
+      "source": "NG12"
+    },
+    {
+      "id": "OV-PERSISTENT",
+      "cancer": "ovarian",
+      "tier": "SOON",
+      "any_of": [
+        "abdominal_distension",
+        "early_satiety",
+        "pelvic_pain",
+        "urinary_urgency"
+      ],
+      "conditions": {
+        "persistent": [
+          true
+        ]
+      },
+      "action": "Primary-care tests (CA125 blood test, then pelvic ultrasound if raised).",
+      "source": "NG12"
+    },
+    {
+      "id": "OV-NEW-IBS-50",
+      "cancer": "ovarian",
+      "tier": "SOON",
+      "any_of": [
+        "new_bowel_habit_change"
+      ],
+      "conditions": {
+        "age_band": [
+          "50-54",
+          "55+"
+        ]
+      },
+      "action": "Consider CA125 testing for new IBS-like symptoms at age 50+.",
+      "source": "NG12"
+    },
+    {
+      "id": "EN-PMB-55",
+      "cancer": "endometrial",
+      "tier": "URGENT",
+      "any_of": [
+        "postmenopausal_bleeding"
+      ],
+      "conditions": {
+        "age_band": [
+          "55+"
+        ]
+      },
+      "action": "Suspected cancer pathway referral for post-menopausal bleeding, age 55+.",
+      "source": "NG12"
+    },
+    {
+      "id": "EN-PMB-U55",
+      "cancer": "endometrial",
+      "tier": "URGENT",
+      "any_of": [
+        "postmenopausal_bleeding"
+      ],
+      "conditions": {
+        "age_band": [
+          "<30",
+          "30-49",
+          "50-54"
+        ]
+      },
+      "action": "Consider suspected cancer pathway referral for post-menopausal bleeding under 55.",
+      "source": "NG12"
+    },
+    {
+      "id": "CX-PCB",
+      "cancer": "cervical",
+      "tier": "SOON",
+      "any_of": [
+        "postcoital_bleeding"
+      ],
+      "conditions": {},
+      "action": "Clinical examination of the cervix (speculum examination) soon.",
+      "source": "CKS-CERVICAL"
+    },
+    {
+      "id": "CX-IMB",
+      "cancer": "cervical",
+      "tier": "SOON",
+      "any_of": [
+        "intermenstrual_bleeding"
+      ],
+      "conditions": {
+        "persistent": [
+          true
+        ]
+      },
+      "action": "Clinical examination for persistent bleeding between periods.",
+      "source": "CKS-CERVICAL"
+    },
+    {
+      "id": "CX-DISCHARGE",
+      "cancer": "cervical",
+      "tier": "SOON",
+      "any_of": [
+        "abnormal_vaginal_discharge"
+      ],
+      "conditions": {
+        "persistent": [
+          true
+        ]
+      },
+      "action": "Clinical examination for persistent unusual (e.g. blood-stained or foul-smelling) discharge.",
+      "source": "CKS-CERVICAL"
+    }
+  ],
+  "variables": {
+    "age_band": {
+      "values": [
+        "<30",
+        "30-49",
+        "50-54",
+        "55+"
+      ],
+      "prior": [
+        0.3,
+        0.4,
+        0.1,
+        0.2
+      ],
+      "cost": 1,
+      "question": "Which age group are you in?"
+    },
+    "persistent": {
+      "values": [
+        true,
+        false
+      ],
+      "prior": [
+        0.4,
+        0.6
+      ],
+      "cost": 1,
+      "question": "Have the symptoms been present for 3 weeks or more, or on most days?"
+    },
+    "unilateral": {
+      "values": [
+        true,
+        false
+      ],
+      "prior": [
+        0.7,
+        0.3
+      ],
+      "cost": 2,
+      "question": "Is the nipple change unilateral (one side only)?"
+    },
+    "bleeding_context": {
+      "values": [
+        "after_sex",
+        "between_periods",
+        "after_menopause",
+        "during_period"
+      ],
+      "prior": [
+        0.25,
+        0.35,
+        0.15,
+        0.25
+      ],
+      "cost": 3,
+      "question": "When does the bleeding occur?",
+      "resolves": {
+        "after_sex": "postcoital_bleeding",
+        "between_periods": "intermenstrual_bleeding",
+        "after_menopause": "postmenopausal_bleeding",
+        "during_period": null
+      }
+    }
+  },
+  "safety_net": {
+    "breast": "Seek clinical review for any new breast lump, skin dimpling, nipple retraction, or unilateral nipple discharge.",
+    "cervical": "Seek clinical review for post-coital bleeding, intermenstrual bleeding, or persistent abnormal vaginal discharge.",
+    "ovarian": "Seek clinical review if abdominal distension, early satiety, pelvic pain or urinary urgency persist for 3 weeks or more.",
+    "endometrial": "Any post-menopausal bleeding (more than 12 months after the last period) requires clinical assessment."
+  }
+}

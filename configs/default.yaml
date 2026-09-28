@@ -1,0 +1,29 @@
+# RareCare runtime configuration.
+# Checkpoints are null until the corresponding model is trained; the pipeline then
+# falls back to the rule baseline and reports `rule-baseline` / `unavailable` modes.
+
+triage:
+  confidence_to_decide: 0.9
+  escalation_floor: 0.1
+  max_questions: 4
+  cost_exponent: 1.0
+  persistence_days: 21
+
+models:
+  text_extractor_checkpoint: null      # e.g. nush1729/rarecare-biobert-extractor
+  criteria_classifier_checkpoint: null # e.g. nush1729/rarecare-biobert-criteria
+  concept_normalizer_checkpoint: null  # e.g. nush1729/rarecare-sapbert-aligned
+  vision_checkpoint: null              # e.g. checkpoints/vision/convnext_tiny.pt
+  conformal_thresholds: null           # e.g. checkpoints/conformal.json
+  retriever: bm25
+  device: cpu
+
+conformal:
+  alpha: 0.05
+
+app:
+  max_upload_mb: 8
+  session_ttl_seconds: 900
+  max_sessions: 10000
+  rate_limit_per_minute: 30
+  max_text_chars: 2000

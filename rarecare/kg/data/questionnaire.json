@@ -1,0 +1,108 @@
+{
+  "_meta": "Structured questionnaire. Every option maps to a lexicon concept id, so questionnaire answers and free text feed the same reasoner.",
+  "areas": [
+    {
+      "id": "breast",
+      "title": "Breast and axilla",
+      "subtitle": "Lumps, nipple and skin changes",
+      "symptoms": [
+        {
+          "concept": "breast_lump",
+          "label": "Breast lump or mass"
+        },
+        {
+          "concept": "axillary_lump",
+          "label": "Axillary (armpit) lump"
+        },
+        {
+          "concept": "nipple_discharge",
+          "label": "Nipple discharge"
+        },
+        {
+          "concept": "nipple_retraction",
+          "label": "Nipple retraction (inversion)"
+        },
+        {
+          "concept": "nipple_change",
+          "label": "Nipple skin changes (crusting or scaling)"
+        },
+        {
+          "concept": "breast_skin_change",
+          "label": "Skin dimpling or peau d'orange"
+        }
+      ]
+    },
+    {
+      "id": "gynaecological",
+      "title": "Gynaecological",
+      "subtitle": "Abnormal bleeding or vaginal discharge",
+      "symptoms": [
+        {
+          "concept": "postcoital_bleeding",
+          "label": "Post-coital bleeding"
+        },
+        {
+          "concept": "intermenstrual_bleeding",
+          "label": "Intermenstrual bleeding"
+        },
+        {
+          "concept": "postmenopausal_bleeding",
+          "label": "Post-menopausal bleeding (12+ months after last period)"
+        },
+        {
+          "concept": "abnormal_vaginal_discharge",
+          "label": "Abnormal vaginal discharge (blood-stained or malodorous)"
+        },
+        {
+          "concept": "vaginal_bleeding_unspecified",
+          "label": "Vaginal bleeding, timing unspecified"
+        }
+      ]
+    },
+    {
+      "id": "abdominal",
+      "title": "Abdominal and pelvic",
+      "subtitle": "Distension, satiety, pain, urinary or bowel changes",
+      "symptoms": [
+        {
+          "concept": "abdominal_distension",
+          "label": "Abdominal distension (bloating)"
+        },
+        {
+          "concept": "early_satiety",
+          "label": "Early satiety or loss of appetite"
+        },
+        {
+          "concept": "pelvic_pain",
+          "label": "Pelvic or lower abdominal pain"
+        },
+        {
+          "concept": "urinary_urgency",
+          "label": "Urinary urgency or frequency"
+        },
+        {
+          "concept": "new_bowel_habit_change",
+          "label": "New change in bowel habit"
+        },
+        {
+          "concept": "abdominal_pelvic_mass",
+          "label": "Palpable abdominal or pelvic mass"
+        }
+      ]
+    }
+  ],
+  "durations": [
+    {
+      "value": "lt_3w",
+      "label": "Less than 3 weeks"
+    },
+    {
+      "value": "gte_3w",
+      "label": "3 weeks or more, or on most days"
+    },
+    {
+      "value": "unsure",
+      "label": "Unsure"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.DS_Store
+.env
+
+# data and model artefacts are never committed
+data/raw/
+data/manifests/
+data/stigmasymp_w/
+data/maccrobat/
+data/human_test*.jsonl
+checkpoints/
+reports/
+wandb/
+.claude/

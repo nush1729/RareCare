@@ -1,0 +1,33 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -r requirements.txt -e ".[dev]"
+      - run: ruff check .
+      - run: mypy
+      - run: pytest
+      - name: Regression gate (rule baseline must not under-triage generated vignettes)
+        run: |
+          python -m training.stigmasymp --n 1500 --out /tmp/ss
+          python -m eval.run_text_eval --data /tmp/ss/val.jsonl --out /tmp/eval.json > /dev/null
+          python - <<'PY'
+          import json
+          r = json.load(open("/tmp/eval.json"))["overall"]
+          ut = r["under_triage"][0]
+          print("under-triage:", ut)
+          assert ut <= 0.02, f"under-triage regression: {ut}"
+          PY

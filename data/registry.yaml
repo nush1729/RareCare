@@ -1,0 +1,72 @@
+# Dataset registry. `access`: auto = scripted download; manual = licence/registration
+# required (script prints instructions). `verified: false` = access route and licence
+# to be confirmed in Phase 0 before use. Raw data is never committed (see .gitignore).
+
+text:
+  maccrobat:
+    role: Stage-1 symptom span extraction (generic Sign_symptom entities)
+    url: https://figshare.com/articles/dataset/MACCROBAT2018/9764942
+    access: manual
+    verified: false
+  nice_ng12:
+    role: Referral criteria (encoded in rarecare/kg/data/criteria.json)
+    url: https://www.nice.org.uk/guidance/ng12
+    access: reference
+    verified: true
+  chv:
+    role: Consumer Health Vocabulary, lay-to-clinical lexicon expansion
+    url: https://www.nlm.nih.gov/research/umls/sourcereleasedocs/current/CHV/index.html
+    access: manual (UMLS licence)
+    verified: false
+  stigmasymp_w:
+    role: Train/val vignettes (generated); human-written test set (collected)
+    url: training/stigmasymp.py
+    access: generated
+    verified: true
+
+vision:
+  medmnist_plus:
+    role: BreastMNIST benchmark; Chest/OCT/Retina/OrganA/Blood as router "unsupported_medical"
+    url: https://medmnist.com
+    access: auto
+    verified: true
+  busi:
+    role: Breast ultrasound train (benign / malignant / normal, with masks)
+    url: https://scholar.cu.edu.eg/?q=afahmy/pages/dataset
+    access: manual
+    verified: false
+  bus_bra:
+    role: Breast ultrasound external test (Brazil)
+    url: https://github.com/wgomezf/BUS-BRA
+    access: manual
+    verified: false
+  breast_lesions_usg:
+    role: Paired ultrasound + clinical metadata (fusion validation)
+    url: https://www.cancerimagingarchive.net/collection/breast-lesions-usg/
+    access: manual (TCIA)
+    verified: false
+  sipakmed:
+    role: Cervical cytology train
+    url: https://www.cs.uoi.gr/~marina/sipakmed.html
+    access: manual
+    verified: false
+  herlev:
+    role: Cervical cytology external test
+    url: https://mde-lab.aegean.gr/index.php/downloads
+    access: manual
+    verified: false
+  mmotu:
+    role: Ovarian tumour ultrasound (clinic-side, optional)
+    url: https://github.com/cv516Buaa/MMOTU_DS2Net
+    access: manual
+    verified: false
+  medmnist_c:
+    role: Corruption robustness benchmark
+    url: https://github.com/francescodisalvo05/medmnistc-api
+    access: manual
+    verified: false
+  outliers_coco:
+    role: Outlier exposure for router "non_medical" class
+    url: https://cocodataset.org
+    access: manual
+    verified: true

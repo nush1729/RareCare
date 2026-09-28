@@ -1,0 +1,17 @@
+# Configuration once models are trained (see notebooks/03-06). Fill in real ids.
+triage:
+  confidence_to_decide: 0.9
+  escalation_floor: 0.1
+  max_questions: 4
+  cost_exponent: 1.0
+  persistence_days: 21
+models:
+  text_extractor_checkpoint: nush1729/rarecare-biobert-extractor
+  criteria_classifier_checkpoint: nush1729/rarecare-biobert-criteria
+  concept_normalizer_checkpoint: checkpoints/sapbert-aligned
+  vision_checkpoint: checkpoints/vision/convnext_tiny.pt
+  conformal_thresholds: checkpoints/conformal.json
+  retriever: medcpt
+  device: cpu
+conformal:
+  alpha: 0.05
