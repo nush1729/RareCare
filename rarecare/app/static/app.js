@@ -13,7 +13,7 @@
     WATCH: "Keep an eye on it",
     NEED_MORE_INFO: "One quick question",
   };
-  const MODE_LABELS = { neural: "trained model", "rule-baseline": "rule baseline", unavailable: "under training" };
+  const MODE_LABELS = { neural: "trained model", "rule-baseline": "rule baseline", unavailable: "trained, not deployed (see Research)" };
 
   function el(tag, props = {}, children = []) {
     const n = document.createElement(tag);

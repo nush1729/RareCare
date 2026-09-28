@@ -80,7 +80,7 @@ def create_app(config: Config | None = None, pipeline: RareCarePipeline | None =
         return jsonify(
             {
                 "name": "RareCare",
-                "status": "research prototype, ongoing; neural models under training",
+                "status": "research prototype, ongoing; trained vision model deployed, neural text models evaluated but not deployed",
                 "intended_use": "Screening triage research for breast, cervical and ovarian cancer symptoms.",
                 "not_intended_for": "Diagnosis or clinical decision-making.",
                 "components": {k: v.value for k, v in pipe.modes.items()},

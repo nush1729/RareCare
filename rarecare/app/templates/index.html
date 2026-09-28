@@ -268,7 +268,7 @@
 
           <details class="build" id="build" hidden>
             <summary>About this build</summary>
-            <p>RareCare is an ongoing research prototype. The neural models (BioBERT, SapBERT, ConvNeXt) are under training; until they are deployed, the components below run in the modes shown.</p>
+            <p>RareCare is an ongoing research prototype. The ConvNeXt image model is trained and deployed. BioBERT and SapBERT are trained but not deployed: on held-out phrasings the guideline rules were more precise, with zero under-triage.</p>
             <ul id="modes"></ul>
           </details>
 
@@ -324,7 +324,7 @@
         </div>
         <div class="status-card">
           <h3>Status</h3>
-          <p>The system architecture, guideline graph, questioning agent, uncertainty layer and this app are built. BioBERT, SapBERT and ConvNeXt models are being trained; statistical results will be published after training and external validation.</p>
+          <p>First training round complete. Breast ultrasound model: AUROC 0.92 (95% CI 0.86–0.97) on held-out test images; the conformal layer caught 97% of malignant scans against a 95% target. Text results await a human-written test set; external validation is next.</p>
           <p class="hint">Not a medical device. Not clinically validated.</p>
         </div>
       </div>
