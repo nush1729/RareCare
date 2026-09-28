@@ -35,6 +35,8 @@ class ModelConfig:
     vision_checkpoint: str | None = None
     conformal_thresholds: str | None = None
     retriever: str = "bm25"  # "bm25" | "medcpt"
+    # Presidio NER scrubbing: off by default (mis-tags code-mixed symptoms; see text/pii.py).
+    presidio: bool = False
     device: str = "cpu"
 
 

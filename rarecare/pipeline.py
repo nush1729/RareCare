@@ -63,12 +63,16 @@ class RareCarePipeline:
         self.modes: dict[str, ComponentMode] = {}
 
         m = self.cfg.models
+        # Hybrid extraction: the lexicon is always on (high precision); a trained BioBERT
+        # extractor only *adds* concepts the lexicon missed. Replacing the lexicon with
+        # the neural model lowered F1 on every register in evaluation.
         self.extractor: Extractor = LexiconExtractor(self.kg)
+        self.neural_extractor: Extractor | None = None
         self.modes["symptom_extractor"] = ComponentMode.RULE_BASELINE
         if m.text_extractor_checkpoint:
             from rarecare.text.extractor import BioBERTExtractor
 
-            self.extractor = BioBERTExtractor(m.text_extractor_checkpoint, self.kg, m.device)
+            self.neural_extractor = BioBERTExtractor(m.text_extractor_checkpoint, self.kg, m.device)
             self.modes["symptom_extractor"] = ComponentMode.NEURAL
 
         self.criteria_clf = None
@@ -99,10 +103,20 @@ class RareCarePipeline:
 
     # ------------------------------------------------------------------ text
 
+    def _clean(self, text: str) -> str:
+        normalized = normalize(text)
+        protected = [(f.start, f.end) for f in LexiconExtractor(self.kg).extract(normalized)]
+        return normalize(scrub(normalized, use_presidio=self.cfg.models.presidio, protected=protected))
+
     def extract(self, text: str) -> list[Finding]:
-        clean = normalize(scrub(text))
+        clean = self._clean(text)
         findings = self.extractor.extract(clean)
         covered = {f.concept_id for f in findings}
+        if self.neural_extractor is not None:
+            for f in self.neural_extractor.extract(clean):
+                if f.concept_id not in covered:
+                    findings.append(f)
+                    covered.add(f.concept_id)
         if self.normalizer is not None:
             for clause in filter(None, (c.strip() for c in _CLAUSE.split(clean))):
                 if any(f.span.lower() in clause.lower() for f in findings):
@@ -138,7 +152,7 @@ class RareCarePipeline:
         return findings
 
     def _initial_state(self, text: str, findings: list[Finding], age_band: str | None) -> TriageState:
-        clean = normalize(scrub(text))
+        clean = self._clean(text)
         state = TriageState(
             present={f.concept_id for f in findings if not f.negated},
             negated={f.concept_id for f in findings if f.negated},

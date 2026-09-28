@@ -81,3 +81,36 @@ def test_pii_scrub():
 
 def test_normalize_unicode():
     assert normalize("I’m   fine\n") == "I'm fine"
+
+
+def test_presidio_can_never_erase_symptoms(monkeypatch, pipe):
+    """Regression: Presidio tagged 'neeche se khoon' as <PERSON> on Colab, erasing a symptom."""
+    from dataclasses import replace
+
+    from rarecare.text import pii
+
+    class R:
+        def __init__(self, start, end):
+            self.start, self.end = start, end
+
+    class FakeAnalyzer:
+        def analyze(self, text, language, entities):
+            i = text.find("neeche se khoon")
+            return [R(i, i + len("neeche se khoon"))] if i >= 0 else []
+
+    class FakeAnonymizer:
+        def anonymize(self, text, analyzer_results):
+            for r in sorted(analyzer_results, key=lambda r: -r.start):
+                text = text[: r.start] + "<PERSON>" + text[r.end :]
+            return type("Out", (), {"text": text})()
+
+    monkeypatch.setattr(pii, "_presidio", lambda: (FakeAnalyzer(), FakeAnonymizer()))
+    # Unprotected Presidio would erase it...
+    assert "khoon" not in pii.scrub("neeche se khoon hai", use_presidio=True)
+    # ...but the pipeline protects clinical spans even with Presidio enabled.
+    pipe.cfg = replace(pipe.cfg, models=replace(pipe.cfg.models, presidio=True))
+    try:
+        found = {f.concept_id for f in pipe.extract("neeche se khoon hai, kya karu?")}
+    finally:
+        pipe.cfg = replace(pipe.cfg, models=replace(pipe.cfg.models, presidio=False))
+    assert "vaginal_bleeding_unspecified" in found
