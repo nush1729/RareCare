@@ -16,8 +16,16 @@ def kl_to_uniform_dirichlet(alpha: torch.Tensor) -> torch.Tensor:
     return (term1 + term2).squeeze(-1)
 
 
-def evidential_loss(evidence: torch.Tensor, target: torch.Tensor, epoch: int, anneal_epochs: int = 10) -> torch.Tensor:
-    """Expected-MSE evidential loss with annealed KL regulariser.
+def evidential_loss(
+    evidence: torch.Tensor,
+    target: torch.Tensor,
+    epoch: int,
+    anneal_epochs: int = 10,
+    sample_weight: torch.Tensor | None = None,
+    kl_scale: float = 1.0,
+    kind: str = "digamma",
+) -> torch.Tensor:
+    """Evidential loss (digamma / cross-entropy Bayes risk or expected MSE) with annealed KL regulariser.
 
     evidence: (N, K) non-negative. target: (N,) int class ids.
     """
@@ -26,8 +34,16 @@ def evidential_loss(evidence: torch.Tensor, target: torch.Tensor, epoch: int, an
     alpha = evidence + 1.0
     s = alpha.sum(-1, keepdim=True)
     p = alpha / s
-    err = ((y - p) ** 2).sum(-1)
-    var = (p * (1 - p) / (s + 1)).sum(-1)
+    if kind == "digamma":
+        # Bayes risk of cross-entropy under Dir(alpha): stronger gradients than MSE.
+        data_term = (y * (torch.digamma(s) - torch.digamma(alpha))).sum(-1)
+    elif kind == "mse":
+        data_term = ((y - p) ** 2).sum(-1) + (p * (1 - p) / (s + 1)).sum(-1)
+    else:
+        raise ValueError(f"unknown evidential loss kind {kind!r}")
     alpha_tilde = y + (1 - y) * alpha  # remove evidence of the true class before the KL
     anneal = min(1.0, epoch / max(1, anneal_epochs))
-    return (err + var + anneal * kl_to_uniform_dirichlet(alpha_tilde)).mean()
+    per_sample = data_term + kl_scale * anneal * kl_to_uniform_dirichlet(alpha_tilde)
+    if sample_weight is not None:
+        return (per_sample * sample_weight).sum() / sample_weight.sum()
+    return per_sample.mean()

@@ -189,15 +189,17 @@ def train_criteria(args: argparse.Namespace) -> None:
     concepts = concept_ids()
     n = len(concepts)
     id2label = {i: f"neg_{c}" for i, c in enumerate(concepts)} | {n + i: f"pos_{c}" for i, c in enumerate(concepts)}
-    tok = AutoTokenizer.from_pretrained(BASE_MODEL)
+    tok = AutoTokenizer.from_pretrained(args.base_model)
     model = AutoModelForSequenceClassification.from_pretrained(
-        BASE_MODEL,
+        args.base_model,
         num_labels=2 * n,
         id2label=id2label,
         label2id={v: k for k, v in id2label.items()},
         problem_type="multi_label_classification",
     )
-    device = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
+    device = args.device or (
+        "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
+    )
     model.to(device)
 
     def batches(rows: list[dict[str, Any]], shuffle: bool) -> DataLoader[Any]:
@@ -212,8 +214,8 @@ def train_criteria(args: argparse.Namespace) -> None:
 
         return DataLoader(rows, batch_size=args.batch, shuffle=shuffle, collate_fn=collate)  # type: ignore[arg-type]
 
-    train_dl = batches(read_jsonl(args.data / "train.jsonl"), True)
-    val_dl = batches(read_jsonl(args.data / "val.jsonl"), False)
+    train_dl = batches(read_jsonl(args.data / "train.jsonl")[: args.limit], True)
+    val_dl = batches(read_jsonl(args.data / "val.jsonl")[: args.limit], False)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     sched = get_linear_schedule_with_warmup(opt, int(0.1 * len(train_dl) * args.epochs), len(train_dl) * args.epochs)
 
@@ -225,7 +227,11 @@ def train_criteria(args: argparse.Namespace) -> None:
             logits = model(**{k: v.to(device) for k, v in b.items()}).logits
             ev = torch.nn.functional.softplus(logits)
             ev2 = torch.stack([ev[:, :n], ev[:, n:]], dim=-1).reshape(-1, 2)
-            loss = evidential_loss(ev2, y.reshape(-1), epoch)
+            flat_y = y.reshape(-1)
+            # Concepts are sparse (~8% positive per label): up-weight positives so the
+            # KL regulariser on negatives cannot drive all positive evidence to zero.
+            w = torch.where(flat_y == 1, args.pos_weight, 1.0).float()
+            loss = evidential_loss(ev2, flat_y, epoch, sample_weight=w, kl_scale=args.kl_scale, kind=args.loss)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
@@ -244,7 +250,7 @@ def train_criteria(args: argparse.Namespace) -> None:
                 fp += int(((pred == 1) & (y == 0)).sum())
                 fn += int(((pred == 0) & (y == 1)).sum())
         f1 = 2 * tp / max(1, 2 * tp + fp + fn)
-        print(f"epoch {epoch}: val micro-F1 = {f1:.4f}")
+        print(f"epoch {epoch}: val micro-F1 = {f1:.4f} (tp={tp} fp={fp} fn={fn})", flush=True)
         if f1 > best:
             best = f1
             model.save_pretrained(str(args.out))
@@ -263,6 +269,12 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=13)
     ap.add_argument("--fp16", action="store_true")
     ap.add_argument("--report-to", default="none")
+    ap.add_argument("--base-model", default=BASE_MODEL)
+    ap.add_argument("--device", default=None, help="override device (cuda | mps | cpu)")
+    ap.add_argument("--pos-weight", type=float, default=10.0, help="criteria: weight of positive labels")
+    ap.add_argument("--loss", choices=["digamma", "mse"], default="digamma", help="criteria: evidential loss form")
+    ap.add_argument("--kl-scale", type=float, default=0.1, help="criteria: evidential KL regulariser scale")
+    ap.add_argument("--limit", type=int, default=None, help="debug: cap rows per split")
     ap.add_argument("--generic", action="store_true", help="MACCROBAT stage: generic SYMPTOM tags")
     ap.add_argument("--init", type=Path, default=None, help="start from a stage-1 checkpoint")
     args = ap.parse_args()
