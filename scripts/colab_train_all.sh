@@ -51,12 +51,13 @@ if [ ! -f data/manifests/vision.csv ]; then
   python data/scripts/download_data.py --root data/raw --size 224 --router-size 64 --cap 1500 \
     --flags breastmnist retinamnist bloodmnist pneumoniamnist dermamnist
   python - <<'PY'
-import pathlib, torchvision
-cifar = torchvision.datasets.CIFAR10("data/_cifar", train=True, download=True)
+import pathlib
+from datasets import load_dataset  # HF mirror: much faster than the original CIFAR host
+cifar = load_dataset("uoft-cs/cifar10", split="train[:3000]")
 out = pathlib.Path("data/raw/outliers/cifar"); out.mkdir(parents=True, exist_ok=True)
-for i in range(3000):
-    cifar[i][0].resize((128, 128)).save(out / f"{i:05d}.png")
-print("cifar outliers: 3000")
+for i, row in enumerate(cifar):
+    row["img"].convert("RGB").resize((128, 128)).save(out / f"{i:05d}.png")
+print("cifar outliers:", len(cifar))
 PY
   python data/scripts/build_vision_manifest.py --root data/raw --out data/manifests/vision.csv
 fi
