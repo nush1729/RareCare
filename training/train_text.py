@@ -58,6 +58,22 @@ def bio_labels(generic: bool = False) -> list[str]:
     return labels
 
 
+def bio_spans(tags: list[str]) -> set[tuple[int, int, str]]:
+    """Exact-match entity spans (start, end, type) from a BIO sequence (seqeval-style strict)."""
+    spans: set[tuple[int, int, str]] = set()
+    start, kind = -1, ""
+    for i, tag in enumerate([*tags, "O"]):
+        inside = tag.startswith("I-") and tag[2:] == kind and start >= 0
+        if inside:
+            continue
+        if start >= 0:
+            spans.add((start, i, kind))
+            start, kind = -1, ""
+        if tag.startswith(("B-", "I-")):
+            start, kind = i, tag[2:]
+    return spans
+
+
 def encode_bio(rows: list[dict[str, Any]], tokenizer: Any, label2id: dict[str, int], max_len: int = 128) -> Any:
     """Char spans -> token BIO labels via offset mapping. Negated spans are still
     entities (negation is handled by the assertion step), matching the app."""
@@ -87,7 +103,6 @@ def encode_bio(rows: list[dict[str, Any]], tokenizer: Any, label2id: dict[str, i
 
 
 def train_extractor(args: argparse.Namespace) -> None:
-    import evaluate
     from transformers import (
         AutoModelForTokenClassification,
         AutoTokenizer,
@@ -110,17 +125,19 @@ def train_extractor(args: argparse.Namespace) -> None:
         label2id=label2id,
         ignore_mismatched_sizes=True,  # stage 2 swaps the generic head for concept tags
     )
-    seqeval = evaluate.load("seqeval")
-
     def metrics(p: Any) -> dict[str, float]:
         preds = p.predictions.argmax(-1)
-        true_l, pred_l = [], []
+        tp = fp = fn = 0
         for pr, la in zip(preds, p.label_ids, strict=True):
             keep = la != -100
-            true_l.append([labels[x] for x in la[keep]])
-            pred_l.append([labels[x] for x in pr[keep]])
-        r = seqeval.compute(predictions=pred_l, references=true_l)
-        return {"precision": r["overall_precision"], "recall": r["overall_recall"], "f1": r["overall_f1"]}
+            gold = bio_spans([labels[x] for x in la[keep]])
+            pred = bio_spans([labels[x] for x in pr[keep]])
+            tp += len(gold & pred)
+            fp += len(pred - gold)
+            fn += len(gold - pred)
+        prec = tp / max(1, tp + fp)
+        rec = tp / max(1, tp + fn)
+        return {"precision": prec, "recall": rec, "f1": 2 * prec * rec / max(1e-9, prec + rec)}
 
     trainer = Trainer(
         model=model,

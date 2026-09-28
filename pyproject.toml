@@ -33,8 +33,6 @@ train = [
   "rarecare[ml]",
   "torchvision>=0.19",
   "datasets>=3.0",
-  "evaluate>=0.4",
-  "seqeval>=1.2",
   "scikit-learn>=1.5",
   "medmnist>=3.0",
   "pandas>=2.2",

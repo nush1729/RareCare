@@ -25,3 +25,12 @@ def test_generator_is_deterministic(kg):
     a = [v.text for v in Generator(kg, seed=5).generate(50)]
     b = [v.text for v in Generator(kg, seed=5).generate(50)]
     assert a == b
+
+
+def test_bio_spans_strict():
+    from training.train_text import bio_spans
+
+    assert bio_spans(["O", "B-a", "I-a", "O", "B-b"]) == {(1, 3, "a"), (4, 5, "b")}
+    assert bio_spans(["I-a", "I-a"]) == {(0, 2, "a")}  # dangling I- starts a span
+    assert bio_spans(["B-a", "I-b"]) == {(0, 1, "a"), (1, 2, "b")}
+    assert bio_spans([]) == set()
