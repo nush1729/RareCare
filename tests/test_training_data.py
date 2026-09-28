@@ -34,3 +34,13 @@ def test_bio_spans_strict():
     assert bio_spans(["I-a", "I-a"]) == {(0, 2, "a")}  # dangling I- starts a span
     assert bio_spans(["B-a", "I-b"]) == {(0, 1, "a"), (1, 2, "b")}
     assert bio_spans([]) == set()
+
+
+def test_auroc_matches_definition():
+    import numpy as np
+
+    from eval.run_vision_eval import auroc
+
+    assert auroc(np.array([0.9, 0.8, 0.1]), np.array([1, 1, 0])) == 1.0
+    assert auroc(np.array([0.5, 0.5]), np.array([1, 0])) == 0.5
+    assert np.isnan(auroc(np.array([0.5]), np.array([1])))

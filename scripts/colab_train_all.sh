@@ -80,4 +80,6 @@ for name in ("rule", "trained"):
     print(name, {k: (round(v["concept_micro_f1"][0], 4), round(v["under_triage"][0], 4))
                  for k, v in r["by_register"].items()})
 PY
+stage "8/8 held-out vision evaluation (BreastMNIST test split)"
+python -m eval.run_vision_eval --checkpoint checkpoints/vision/convnext_tiny.pt --out reports/vision_eval.json
 stage "DONE"
