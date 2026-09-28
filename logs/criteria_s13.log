@@ -1,23 +1,0 @@
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-[transformers] You passed `num_labels=36` which is incompatible to the `id2label` map of length `2`.
-Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 28391.95it/s]
-[transformers] [1mBertForSequenceClassification LOAD REPORT[0m from: dmis-lab/biobert-base-cased-v1.2
-Key                                        | Status     | 
--------------------------------------------+------------+-
-cls.seq_relationship.bias                  | UNEXPECTED | 
-cls.predictions.transform.dense.bias       | UNEXPECTED | 
-cls.predictions.decoder.weight             | UNEXPECTED | 
-cls.predictions.bias                       | UNEXPECTED | 
-cls.predictions.transform.LayerNorm.weight | UNEXPECTED | 
-cls.predictions.decoder.bias               | UNEXPECTED | 
-cls.predictions.transform.dense.weight     | UNEXPECTED | 
-cls.seq_relationship.weight                | UNEXPECTED | 
-cls.predictions.transform.LayerNorm.bias   | UNEXPECTED | 
-classifier.bias                            | MISSING    | 
-classifier.weight                          | MISSING    | 
-
-Notes:
-- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
-- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
-/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:475: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-10628-qysaqufz'}
-  warnings.warn(
