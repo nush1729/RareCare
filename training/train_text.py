@@ -125,6 +125,7 @@ def train_extractor(args: argparse.Namespace) -> None:
         label2id=label2id,
         ignore_mismatched_sizes=True,  # stage 2 swaps the generic head for concept tags
     )
+
     def metrics(p: Any) -> dict[str, float]:
         preds = p.predictions.argmax(-1)
         tp = fp = fn = 0
