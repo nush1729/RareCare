@@ -1,0 +1,7 @@
+# Deployed configuration (see README §9): rule-based text path (best precision and zero
+# under-triage in evaluation) + trained ConvNeXt vision model with conformal thresholds.
+models:
+  vision_checkpoint: checkpoints/vision/convnext_tiny.pt
+  conformal_thresholds: checkpoints/conformal.json
+  retriever: bm25
+  device: cpu

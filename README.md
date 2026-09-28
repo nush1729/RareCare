@@ -9,7 +9,7 @@
 ![status](https://img.shields.io/badge/status-ongoing%20research-c2396a)
 ![python](https://img.shields.io/badge/python-3.12%2B-3776AB)
 ![flask](https://img.shields.io/badge/serving-Flask%20%2B%20HF%20Spaces-000000)
-![tests](https://img.shields.io/badge/tests-75%20passing-16704a)
+![tests](https://img.shields.io/badge/tests-79%20passing-16704a)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
 
 </div>
@@ -206,17 +206,49 @@ Every number is reported as **mean ± bootstrap 95% CI over ≥ 3 seeds**, with 
 
 ## 9. Project status & results
 
-> 🔄 **Ongoing.** The architecture, guideline graph, questioning agent, uncertainty and conformal layers, training pipelines and the web app are built and tested. **The BioBERT, SapBERT and ConvNeXt models are under training; statistical results will be added here after training and external validation.**
+> 🔄 **Ongoing research.** First training round completed on a Colab A100 (Sept 2026). Results below are **preliminary**: vision numbers use held-out MedMNIST+ splits; text numbers use *generated* vignettes split by phrase. The reportable text result needs the human-written StigmaSymp-W test set (in collection), and vision needs external validation (BUS-BRA, Herlev).
+
+### Vision: ConvNeXt-Tiny (breast ultrasound + router), held-out splits
+
+| Metric | Split | Result |
+|---|---|---|
+| Breast suspicion AUROC | BreastMNIST **test** (n = 156, 42 malignant) | **0.920** (95% CI 0.857–0.970, bootstrap) |
+| Specificity @ 90% / 95% sensitivity | BreastMNIST test | 0.728 / 0.456 |
+| Expected calibration error | BreastMNIST test | 0.056 |
+| Router: unseen scans recognised as *unsupported* | MedMNIST **test** (Retina / Blood / Pneumonia / Derm) | 1.000 / 1.000 / 0.998 / 1.000 |
+| **Conformal recall of malignant (target ≥ 0.95, α = 0.05)** | val + test pooled (n = 234, 63 malignant), 200 random cal/test halves | **mean 0.973**, 5th pct 0.906 |
+| Conformal flag rate | same | 0.70 (the price of the guarantee at this sample size) |
+
+### Text: StigmaSymp-W validation (n = 1,200, phrases unseen in training)
+
+| Model | Concept F1 | Under-triage | Notes |
+|---|---|---|---|
+| Rule baseline (lexicon + guideline graph) | 1.00 on all 4 registers | **0.00** | Optimistic: the lexicon was written with these registers in mind |
+| BioBERT evidential classifier (3 seeds) | 0.411 ± 0.033 | — | 0.447 / 0.405 / 0.382 |
+| BioBERT span extractor (strict) | 0.184 (P 0.151, R 0.233) | — | exact spans on unseen phrasings |
+| Hybrid rules + BioBERT | 0.585 | 0.00 | neural adds recall but false positives lower precision |
+| SapBERT lay → clinical alignment | InfoNCE loss 2.22 → 0.24 | — | lay-language-gap test pending human data |
+
+**Deployed configuration:** rule-based text path (higher precision, zero under-triage) + trained vision model with conformal thresholds. The neural text models are kept as research artefacts until they beat the rules on human-written data.
+
+### Bugs found during training (each fixed with a regression test)
+
+| Bug | Impact | Fix |
+|---|---|---|
+| Presidio NER tagged code-mixed symptoms as names (*"neeche se khoon"* → `<PERSON>`) | **70% under-triage on code-mixed text** | Presidio opt-in; clinical spans can never be scrubbed |
+| Serving preprocessing padded small scans instead of upscaling | Router 0% on unseen PneumoniaMNIST | Serving transform now identical to training (Resize → CenterCrop) |
+| Evidential multi-label loss collapsed to "all absent" | Concept F1 0.00 | Positive-label weighting, digamma evidential loss, scaled KL |
 
 | Milestone | Status |
 |---|---|
 | Guideline graph, lexicon, reasoner, planner | ✅ done |
 | Uncertainty, conformal, fusion, OOD modules | ✅ done |
 | Flask app + UI + API + tests + CI | ✅ done |
-| Training code & Colab notebooks | ✅ done |
-| Model training (text, alignment, vision) | 🔄 under training |
+| Training code, Colab pipeline & notebooks | ✅ done |
+| First training round (text, alignment, vision) | ✅ done |
 | Human-written StigmaSymp-W test set | 🔄 in collection |
-| Results, ablations, paper | ⏳ after training |
+| External validation (BUS-BRA, Herlev), cervical/ovarian image models | ⏳ needs licensed datasets |
+| Ablations, paper | ⏳ next |
 
 ## 10. Quick start
 
@@ -228,7 +260,7 @@ python wsgi.py            # http://127.0.0.1:7860
 ```
 
 ```bash
-pytest                    # 75 tests
+pytest                    # 79 tests
 ruff check . && mypy      # lint + strict types
 ```
 
@@ -294,7 +326,7 @@ training/          StigmaSymp-W generator · BioBERT · SapBERT · ConvNeXt · c
 eval/              screening metrics with bootstrap CIs · per-register text evaluation
 data/              dataset registry + download / conversion / manifest scripts
 notebooks/         Colab training & evaluation notebooks (01–07)
-tests/             75 unit + API tests
+tests/             79 unit + API tests
 docs/BLUEPRINT.md  full research blueprint
 ```
 
