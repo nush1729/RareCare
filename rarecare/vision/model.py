@@ -36,7 +36,7 @@ def build_model(backbone: str = "convnext_tiny", pretrained: bool = True, dropou
         def __init__(self) -> None:
             super().__init__()
             self.backbone = timm.create_model(backbone, pretrained=pretrained, num_classes=0)
-            dim = int(self.backbone.num_features)
+            dim: int = self.backbone.num_features  # type: ignore[assignment]  # timm attribute
             self.dropout = nn.Dropout(dropout)
             self.router = nn.Linear(dim, len(ROUTER_CLASSES))
             self.quality = nn.Linear(dim, 2)
