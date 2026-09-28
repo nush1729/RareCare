@@ -24,17 +24,23 @@ MEDMNIST_EXPORTS = {
     "retinamnist": ("unsupported_medical", None),
     "organamnist": ("unsupported_medical", None),
     "bloodmnist": ("unsupported_medical", None),
+    "pneumoniamnist": ("unsupported_medical", None),
+    "dermamnist": ("unsupported_medical", None),
 }
 
 
-def export_medmnist(root: Path, size: int, per_split_cap: int) -> None:
+def export_medmnist(root: Path, size: int, per_split_cap: int, flags: list[str] | None = None) -> None:
     import medmnist
     from medmnist import INFO
 
     for flag, (_modality, mapping) in MEDMNIST_EXPORTS.items():
+        if flags and flag not in flags:
+            continue
         cls = getattr(medmnist, INFO[flag]["python_class"])
+        cache = root / "_medmnist_cache"
+        cache.mkdir(parents=True, exist_ok=True)
         for split in ("train", "val", "test"):
-            ds = cls(split=split, download=True, size=size, root=str(root / "_medmnist_cache"))
+            ds = cls(split=split, download=True, size=size, root=str(cache))
             out = root / "medmnist" / flag / split
             n = min(len(ds), per_split_cap)
             for i in range(n):
@@ -52,6 +58,8 @@ def main() -> None:
     ap.add_argument("--size", type=int, default=224, choices=[28, 64, 128, 224])
     ap.add_argument("--cap", type=int, default=3000, help="max images per MedMNIST split (router classes)")
     ap.add_argument("--list", action="store_true")
+    ap.add_argument("--flags", nargs="*", help="subset of MedMNIST flags (default: all)")
+    ap.add_argument("--router-size", type=int, default=None, help="smaller size for router-only sets")
     args = ap.parse_args()
 
     registry = yaml.safe_load(REGISTRY.read_text())
@@ -66,7 +74,12 @@ def main() -> None:
         return
 
     args.root.mkdir(parents=True, exist_ok=True)
-    export_medmnist(args.root, args.size, args.cap)
+    flags = args.flags or list(MEDMNIST_EXPORTS)
+    in_scope = [f for f in flags if MEDMNIST_EXPORTS[f][1] is not None]
+    router = [f for f in flags if MEDMNIST_EXPORTS[f][1] is None]
+    export_medmnist(args.root, args.size, args.cap, in_scope)
+    if router:
+        export_medmnist(args.root, args.router_size or args.size, args.cap, router)
     print("\nManual datasets (licence/registration required). Download and extract to data/raw/<name>/:")
     for name, meta in manual:
         print(f"  - {name}: {meta['url']}  ({meta['role']})")

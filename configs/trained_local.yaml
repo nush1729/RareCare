@@ -1,0 +1,9 @@
+# Checkpoints produced by notebooks/00_train_all_colab.ipynb (paths relative to repo root).
+models:
+  text_extractor_checkpoint: checkpoints/biobert-extractor
+  criteria_classifier_checkpoint: checkpoints/biobert-criteria
+  concept_normalizer_checkpoint: checkpoints/sapbert-aligned
+  vision_checkpoint: checkpoints/vision/convnext_tiny.pt
+  conformal_thresholds: checkpoints/conformal.json
+  retriever: bm25
+  device: cpu

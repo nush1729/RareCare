@@ -255,10 +255,11 @@ curl -s localhost:7860/api/v1/assess -H 'content-type: application/json' \
 
 ## 12. Training
 
-All training runs on a single Colab GPU; local development on an Apple M2 (MPS).
+All training runs on a Colab GPU (A100 or T4). Local machines are used only for development and inference.
 
 | Notebook | Purpose |
 |---|---|
+| [`00_train_all_colab`](notebooks/00_train_all_colab.ipynb) | **One click: trains every model on a Colab GPU and saves checkpoints to Google Drive** |
 | [`01_data_setup`](notebooks/01_data_setup.ipynb) | Download MedMNIST+, build the vision manifest, leakage checks |
 | [`02_stigmasymp_w`](notebooks/02_stigmasymp_w.ipynb) | Generate vignettes, phrase-level leakage audit, human test-set protocol |
 | [`03_train_text_biobert`](notebooks/03_train_text_biobert.ipynb) | Two-stage extractor + evidential concept classifier, multi-seed |
