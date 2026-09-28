@@ -66,6 +66,7 @@ files = ["rarecare"]
 module = ["rarecare.vision.model", "rarecare.vision.gradcam", "rarecare.rag.retriever", "rarecare.text.neural"]
 disallow_untyped_calls = false
 warn_return_any = false
+warn_unused_ignores = false  # torch may or may not be installed when type-checking
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -39,13 +39,22 @@ def to_gray_array(img: Image.Image) -> NDArray[np.float64]:
     return np.asarray(img.convert("L"), dtype=np.float64)
 
 
-def to_model_input(img: Image.Image, size: int = 224) -> NDArray[np.float32]:
-    """RGB -> normalised CHW float32 at `size`x`size` (aspect-preserving pad)."""
-    img = img.copy()
-    img.thumbnail((size, size), Image.Resampling.BICUBIC)
-    canvas = Image.new("RGB", (size, size), (0, 0, 0))
-    canvas.paste(img, ((size - img.width) // 2, (size - img.height) // 2))
-    arr = np.asarray(canvas, dtype=np.float64) / 255.0
+def to_model_input(img: Image.Image, size: int = 224, resize: int = 256) -> NDArray[np.float32]:
+    """RGB -> normalised CHW float32, identical to the training/validation transform
+    (torchvision ``Resize(resize)`` on the shorter side, then ``CenterCrop(size)``).
+
+    Serving must match training exactly: an earlier aspect-preserving thumbnail that
+    never upscaled put small scans on a black canvas the model had never seen.
+    """
+    w, h = img.size
+    scale = resize / min(w, h)
+    img = img.convert("RGB").resize(
+        (max(size, round(w * scale)), max(size, round(h * scale))), Image.Resampling.BILINEAR
+    )
+    left = (img.width - size) // 2
+    top = (img.height - size) // 2
+    img = img.crop((left, top, left + size, top + size))
+    arr = np.asarray(img, dtype=np.float64) / 255.0
     arr = (arr - IMAGENET_MEAN) / IMAGENET_STD
     out: NDArray[np.float32] = arr.transpose(2, 0, 1).astype(np.float32)
     return out

@@ -53,3 +53,17 @@ def test_poor_quality_asks_for_retake():
 
 def test_energy_lower_for_confident_logits():
     assert energy_score(np.array([10.0, 0.0, 0.0])) < energy_score(np.array([0.1, 0.0, 0.0]))
+
+
+def test_model_input_matches_training_transform():
+    """Regression: small scans must be upscaled like torchvision Resize+CenterCrop, not padded."""
+    torch = pytest.importorskip("torch")
+    tv = pytest.importorskip("torchvision.transforms")
+    img = Image.fromarray(textured(64, 64).astype(np.uint8))
+    ref = tv.Compose(
+        [tv.Resize(256), tv.CenterCrop(224), tv.ToTensor(), tv.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])]
+    )(img)
+    ours = torch.from_numpy(to_model_input(img))
+    assert ours.shape == ref.shape
+    assert (ours - ref).abs().mean() < 0.05  # PIL vs tensor bilinear differ slightly; padding would differ hugely
+    assert (ours[:, :10, :10].abs().sum()) > 0  # no black padding border

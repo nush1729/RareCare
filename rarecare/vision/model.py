@@ -32,11 +32,11 @@ def build_model(backbone: str = "convnext_tiny", pretrained: bool = True, dropou
     import torch
     from torch import nn
 
-    class RareCareVision(nn.Module):  # type: ignore[misc]
+    class RareCareVision(nn.Module):
         def __init__(self) -> None:
             super().__init__()
             self.backbone = timm.create_model(backbone, pretrained=pretrained, num_classes=0)
-            dim = self.backbone.num_features
+            dim = int(self.backbone.num_features)
             self.dropout = nn.Dropout(dropout)
             self.router = nn.Linear(dim, len(ROUTER_CLASSES))
             self.quality = nn.Linear(dim, 2)
